@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.github.saturnism.springboot</groupId>
+	<artifactId>grpc-starter-build</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>Spring Boot gRPC Starter Build</name>
+	<description>Spring Boot gRPC Starter Build</description>
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<id>saturnism</id>
+			<name>Ray Tsang</name>
+		</developer>
+	</developers>
+	<prerequisites>
+		<maven>3.2.1</maven>
+	</prerequisites>
+	<profiles>
+		<profile>
+			<id>default</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<modules>
+				<module>grpc-parent</module>
+				<module>grpc-server-autoconfigurer</module>
+				<module>grpc-server-starter</module>
+				<module>grpc-client-autoconfigurer</module>
+				<module>grpc-client-starter</module>
+				<module>grpc-server-parent</module>
+			</modules>
+		</profile>
+	</profiles>
+</project>
