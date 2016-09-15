@@ -10,17 +10,17 @@ import java.net.URI;
 /**
  * Created by rayt on 5/17/16.
  */
-public class SpringCloudNameResolverFactory extends NameResolver.Factory {
+public class DiscoveryClientResolverFactory extends NameResolver.Factory {
   private final DiscoveryClient client;
 
-  public SpringCloudNameResolverFactory(DiscoveryClient client) {
+  public DiscoveryClientResolverFactory(DiscoveryClient client) {
     this.client = client;
   }
 
   @Nullable
   @Override
   public NameResolver newNameResolver(URI targetUri, Attributes params) {
-    return new SpringCloudNameResolver(targetUri.toString(), client, params);
+    return new DiscoveryClientNameResolver(targetUri.toString(), client, params);
   }
 
   @Override

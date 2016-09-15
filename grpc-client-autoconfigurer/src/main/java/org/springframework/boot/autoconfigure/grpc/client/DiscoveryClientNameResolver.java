@@ -13,13 +13,13 @@ import java.util.List;
 /**
  * Created by rayt on 5/17/16.
  */
-public class SpringCloudNameResolver extends NameResolver {
+public class DiscoveryClientNameResolver extends NameResolver {
   private final String name;
   private final DiscoveryClient client;
   private final Attributes attributes;
   private Listener listener;
 
-  public SpringCloudNameResolver(String name, DiscoveryClient client, Attributes attributes) {
+  public DiscoveryClientNameResolver(String name, DiscoveryClient client, Attributes attributes) {
     this.name = name;
     this.client = client;
     this.attributes = attributes;

@@ -21,7 +21,7 @@ public class DiscoveryClientChannelFactory implements GrpcChannelFactory {
   public Channel createChannel(String name) {
     return ManagedChannelBuilder.forTarget(name)
         .loadBalancerFactory(SimpleLoadBalancerFactory.getInstance())
-        .nameResolverFactory(new SpringCloudNameResolverFactory(client))
+        .nameResolverFactory(new DiscoveryClientResolverFactory(client))
         .usePlaintext(channels.getChannels().get(name).isPlaintext()).build();
   }
 }
