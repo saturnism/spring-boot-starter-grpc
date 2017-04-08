@@ -16,15 +16,16 @@
 
 package org.springframework.boot.autoconfigure.grpc.server;
 
-import java.net.InetSocketAddress;
-import java.util.LinkedList;
-import java.util.List;
-
 import com.google.common.net.InetAddresses;
 import io.grpc.Server;
 import io.grpc.netty.NettyServerBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+
+import java.net.InetSocketAddress;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Creates a Netty gRPC server using {@link NettyServerBuilder}.
@@ -45,7 +46,7 @@ public class NettyGrpcServerFactory implements GrpcServerFactory {
 		NettyServerBuilder builder = NettyServerBuilder.forAddress(
 				new InetSocketAddress(InetAddresses.forString(getAddress()), getPort()));
 		for (GrpcServiceDefinition service : this.services) {
-			logger.info("Registered gRPC service: " + service.getDefinition().getName()
+			logger.info("Registered gRPC service: " + service.getDefinition().getServiceDescriptor().getName()
 					+ ", bean: " + service.getBeanName() + ", class: "
 					+ service.getBeanClazz().getName());
 			builder.addService(service.getDefinition());
