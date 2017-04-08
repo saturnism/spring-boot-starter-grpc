@@ -1,8 +1,0 @@
-org/springframework/boot/autoconfigure/grpc/client/GrpcChannelsProperties.class
-org/springframework/boot/autoconfigure/grpc/client/GrpcClientAutoConfiguration.class
-org/springframework/boot/autoconfigure/grpc/client/DiscoveryClientChannelFactory.class
-org/springframework/boot/autoconfigure/grpc/client/SpringCloudNameResolverFactory.class
-org/springframework/boot/autoconfigure/grpc/client/SpringCloudNameResolver.class
-org/springframework/boot/autoconfigure/grpc/client/AddressChannelFactory.class
-org/springframework/boot/autoconfigure/grpc/client/GrpcChannelFactory.class
-org/springframework/boot/autoconfigure/grpc/client/GrpcChannelProperties.class

@@ -19,7 +19,7 @@ package org.springframework.boot.autoconfigure.grpc.client;
 
 import io.grpc.Channel;
 import io.grpc.ManagedChannelBuilder;
-import io.grpc.SimpleLoadBalancerFactory;
+import io.grpc.util.RoundRobinLoadBalancerFactory;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 
 /**
@@ -36,8 +36,9 @@ public class DiscoveryClientChannelFactory implements GrpcChannelFactory {
 
   @Override
   public Channel createChannel(String name) {
+	  RoundRobinLoadBalancerFactory instance = RoundRobinLoadBalancerFactory.getInstance();
     return ManagedChannelBuilder.forTarget(name)
-        .loadBalancerFactory(SimpleLoadBalancerFactory.getInstance())
+        .loadBalancerFactory(instance)
         .nameResolverFactory(new DiscoveryClientResolverFactory(client))
         .usePlaintext(channels.getChannels().get(name).isPlaintext()).build();
   }

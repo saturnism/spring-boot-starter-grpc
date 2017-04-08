@@ -17,6 +17,15 @@
 
 package org.springframework.boot.autoconfigure.grpc.server;
 
+import io.grpc.ServerServiceDefinition;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.core.annotation.AnnotationUtils;
+
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -25,15 +34,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
-import io.grpc.ServerServiceDefinition;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.core.annotation.AnnotationUtils;
 
 /**
  * Discovers gRPC service implementations by the {@link GrpcService} annotation.
@@ -86,7 +86,7 @@ public class AnnotationGrpcServiceDiscoverer
 								.invoke(null, bean);
 						definitions.add(new GrpcServiceDefinition(beanName, beanClazz,
 								definition));
-						logger.debug("Found gRPC service: " + definition.getName()
+						logger.debug("Found gRPC service: " + definition.getServiceDescriptor().getName()
 								+ ", bean: " + beanName + ", class: "
 								+ bean.getClass().getName());
 					}

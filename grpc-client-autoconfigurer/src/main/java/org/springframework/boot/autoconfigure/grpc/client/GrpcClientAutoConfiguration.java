@@ -19,7 +19,7 @@ package org.springframework.boot.autoconfigure.grpc.client;
 import io.grpc.Channel;
 
 import io.grpc.LoadBalancer;
-import io.grpc.SimpleLoadBalancerFactory;
+import io.grpc.util.RoundRobinLoadBalancerFactory;
 import org.springframework.boot.autoconfigure.condition.*;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -62,7 +62,7 @@ public class GrpcClientAutoConfiguration {
 	@ConditionalOnMissingBean
 	@Bean
 	public LoadBalancer.Factory defaultGrpcLoadBalancerFactory() {
-		return SimpleLoadBalancerFactory.getInstance();
+		return RoundRobinLoadBalancerFactory.getInstance();
 	}
 
 	@ConditionalOnMissingBean
