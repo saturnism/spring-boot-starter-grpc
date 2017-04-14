@@ -24,7 +24,7 @@
 	<name>Spring Boot gRPC Server Parent</name>
 	<description>Spring Boot gRPC Parent</description>
 	<properties>
-		<grpc.version>0.14.0</grpc.version>
+        <grpc.version>1.0.0</grpc.version>
 		<protoc.version>3.0.0-beta-2</protoc.version>
 		<protoc.plugin.version>0.5.0</protoc.plugin.version>
 	</properties>
