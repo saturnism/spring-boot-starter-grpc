@@ -54,12 +54,13 @@ public class DiscoveryClientNameResolver extends NameResolver {
 
 	@Override
 	public void refresh() {
-		List<ResolvedServerInfo> servers = new ArrayList<ResolvedServerInfo>();
+		List<List<ResolvedServerInfo>> serversList = new ArrayList<>();
 		for (ServiceInstance serviceInstance : client.getInstances(name)) {
+			List<ResolvedServerInfo> servers = new ArrayList<>();
 			System.out.println("Service Instance: " + serviceInstance.getHost() + ":" + serviceInstance.getPort());
 			servers.add(new ResolvedServerInfo(InetSocketAddress.createUnresolved(serviceInstance.getHost(), serviceInstance.getPort()),Attributes.EMPTY));
+			serversList.add(servers);
 		}
-		List<List<ResolvedServerInfo>> serversList = new ArrayList<List<ResolvedServerInfo>>(1);
 		this.listener.onUpdate(serversList, Attributes.EMPTY);
 	}
 
