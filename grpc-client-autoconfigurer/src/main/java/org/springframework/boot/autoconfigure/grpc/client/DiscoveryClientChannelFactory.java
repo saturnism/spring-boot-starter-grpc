@@ -22,24 +22,45 @@ import io.grpc.ManagedChannelBuilder;
 import io.grpc.util.RoundRobinLoadBalancerFactory;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * Created by rayt on 5/17/16.
  */
 public class DiscoveryClientChannelFactory implements GrpcChannelFactory {
   private final GrpcChannelsProperties channels;
   private final DiscoveryClient client;
+  private final DiscoveryClientResolverFactory resolverFactory;
+  private final Map<String, Channel> channelMap = new ConcurrentHashMap<>();
 
   public DiscoveryClientChannelFactory(GrpcChannelsProperties channels, DiscoveryClient client) {
     this.channels = channels;
     this.client = client;
+    resolverFactory = new DiscoveryClientResolverFactory(client);
   }
 
   @Override
   public Channel createChannel(String name) {
 	  RoundRobinLoadBalancerFactory instance = RoundRobinLoadBalancerFactory.getInstance();
-    return ManagedChannelBuilder.forTarget(name)
-        .loadBalancerFactory(instance)
-        .nameResolverFactory(new DiscoveryClientResolverFactory(client))
-        .usePlaintext(channels.getChannels().get(name).isPlaintext()).build();
+	  Channel channel = channelMap.get(name);
+	  if (channel != null) {
+	  	return channel;
+		}
+
+		synchronized (channelMap) {
+	  	channel = channelMap.get(name);
+			if (channel != null) {
+				return channel;
+			}
+	  	channel = ManagedChannelBuilder.forTarget(name)
+							.loadBalancerFactory(instance)
+							.nameResolverFactory(resolverFactory)
+							.usePlaintext(channels.getChannels().get(name).isPlaintext()).build();
+	  	channelMap.put(name, channel);
+		}
+
+    return channel;
   }
 }

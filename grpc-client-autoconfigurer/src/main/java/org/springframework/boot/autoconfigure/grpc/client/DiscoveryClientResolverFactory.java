@@ -21,14 +21,18 @@ import io.grpc.Attributes;
 import io.grpc.NameResolver;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 
-import javax.annotation.Nullable;
+
 import java.net.URI;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import javax.annotation.Nullable;
 
 /**
  * Created by rayt on 5/17/16.
  */
 public class DiscoveryClientResolverFactory extends NameResolver.Factory {
   private final DiscoveryClient client;
+  private final Map<String, NameResolver> nameResolverMap = new ConcurrentHashMap<>();
 
   public DiscoveryClientResolverFactory(DiscoveryClient client) {
     this.client = client;
@@ -37,7 +41,20 @@ public class DiscoveryClientResolverFactory extends NameResolver.Factory {
   @Nullable
   @Override
   public NameResolver newNameResolver(URI targetUri, Attributes params) {
-    return new DiscoveryClientNameResolver(targetUri.toString(), client, params);
+  	String key = targetUri.getPath() + params.toString();
+  	NameResolver resolver = nameResolverMap.get(key);
+  	if (resolver != null) {
+  		return resolver;
+		}
+  	synchronized (nameResolverMap) {
+			resolver = nameResolverMap.get(key);
+			if (resolver != null) {
+				return resolver;
+			}
+			resolver = new DiscoveryClientNameResolver(targetUri.toString(), client, params);
+			nameResolverMap.put(key, resolver);
+		}
+    return resolver;
   }
 
   @Override
