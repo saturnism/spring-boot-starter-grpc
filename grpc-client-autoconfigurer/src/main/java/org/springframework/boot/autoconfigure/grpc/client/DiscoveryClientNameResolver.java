@@ -32,26 +32,26 @@ import java.util.List;
  * Created by rayt on 5/17/16.
  */
 public class DiscoveryClientNameResolver extends NameResolver {
-  private final String name;
-  private final DiscoveryClient client;
-  private final Attributes attributes;
-  private Listener listener;
+	private final String name;
+	private final DiscoveryClient client;
+	private final Attributes attributes;
+	private Listener listener;
 
-  public DiscoveryClientNameResolver(String name, DiscoveryClient client, Attributes attributes) {
-    this.name = name;
-    this.client = client;
-    this.attributes = attributes;
-  }
-  @Override
-  public String getServiceAuthority() {
-    return name;
-  }
+	public DiscoveryClientNameResolver(String name, DiscoveryClient client, Attributes attributes) {
+		this.name = name;
+		this.client = client;
+		this.attributes = attributes;
+	}
+	@Override
+	public String getServiceAuthority() {
+		return name;
+	}
 
-  @Override
-  public void start(Listener listener) {
-    this.listener = listener;
-    refresh();
-  }
+	@Override
+	public void start(Listener listener) {
+		this.listener = listener;
+		refresh();
+	}
 
   @Override
   public void refresh() {
@@ -65,7 +65,7 @@ public class DiscoveryClientNameResolver extends NameResolver {
     this.listener.onUpdate(serversList, Attributes.EMPTY);
   }
 
-  @Override
-  public void shutdown() {
-  }
+	@Override
+	public void shutdown() {
+	}
 }

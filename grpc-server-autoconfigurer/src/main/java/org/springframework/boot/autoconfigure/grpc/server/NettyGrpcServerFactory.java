@@ -40,7 +40,7 @@ public class NettyGrpcServerFactory implements GrpcServerFactory {
   public NettyGrpcServerFactory(GrpcServerProperties properties) {
     this.properties = properties;
   }
-  
+
   @Override
   public Server createServer() {
     NettyServerBuilder builder = NettyServerBuilder.forAddress(
