@@ -28,7 +28,6 @@ import org.springframework.core.annotation.AnnotationUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -67,37 +66,40 @@ public class AnnotationGrpcServiceDiscoverer
       Object bean = this.applicationContext.getBean(beanName);
       Class<?> beanClazz = bean.getClass();
       GrpcService grpcServiceAnnotation = AnnotationUtils.findAnnotation(beanClazz,
-          GrpcService.class);
+              GrpcService.class);
       Class<?> grpcClazz = grpcServiceAnnotation.value();
-      Method[] methods = grpcClazz.getDeclaredMethods();
+      Class<?>[] grpcInnerClasses = grpcClazz.getDeclaredClasses();
       boolean bindServiceFound = false;
-      for (Method method : methods) {
-        if (Modifier.isStatic(method.getModifiers())
-            && method.getName().equals("bindService")) {
-          bindServiceFound = true;
-          try {
-            Class<?> grpcInterfaceClazz = method.getParameterTypes()[0];
-            if (!grpcInterfaceClazz.isAssignableFrom(beanClazz)) {
-              throw new IllegalStateException("gRPC service class: "
-                  + bean.getClass().getName() + " does not implement "
-                  + grpcInterfaceClazz.getName());
+      for (Class<?> clazz : grpcInnerClasses)  {
+        if (! clazz.getName().endsWith("ImplBase")) {
+          continue;
+        }
+
+        Method[] methods = clazz.getDeclaredMethods();
+        for (Method method : methods) {
+          if (method.getName().equals("bindService")) {
+            bindServiceFound = true;
+            try {
+  //            Class<?> grpcInterfaceClazz = method.getParameterTypes()[0];
+  //            if (!grpcInterfaceClazz.isAssignableFrom(beanClazz)) {
+  //              throw new IllegalStateException("gRPC service class: "
+  //                  + bean.getClass().getName() + " does not implement "
+  //                  + grpcInterfaceClazz.getName());
+  //            }
+              ServerServiceDefinition definition = (ServerServiceDefinition) method
+                      .invoke(bean, null);
+              definitions.add(new GrpcServiceDefinition(beanName, beanClazz,
+                      definition));
+              logger.debug("Found gRPC service: " + definition.getServiceDescriptor().getName()
+                      + ", bean: " + beanName + ", class: "
+                      + bean.getClass().getName());
+            } catch (IllegalAccessException e) {
+              throw new IllegalStateException(e);
+            } catch (IllegalArgumentException e) {
+              throw new IllegalStateException(e);
+            } catch (InvocationTargetException e) {
+              throw new IllegalStateException(e);
             }
-            ServerServiceDefinition definition = (ServerServiceDefinition) method
-                .invoke(null, bean);
-            definitions.add(new GrpcServiceDefinition(beanName, beanClazz,
-                definition));
-            logger.debug("Found gRPC service: " + definition.getServiceDescriptor().getName()
-                + ", bean: " + beanName + ", class: "
-                + bean.getClass().getName());
-          }
-          catch (IllegalAccessException e) {
-            throw new IllegalStateException(e);
-          }
-          catch (IllegalArgumentException e) {
-            throw new IllegalStateException(e);
-          }
-          catch (InvocationTargetException e) {
-            throw new IllegalStateException(e);
           }
         }
       }
