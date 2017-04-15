@@ -31,19 +31,18 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DiscoveryClientChannelFactory implements GrpcChannelFactory {
   private final GrpcChannelsProperties channels;
-  private final DiscoveryClient client;
   private final DiscoveryClientResolverFactory resolverFactory;
   private final Map<String, Channel> channelMap = new ConcurrentHashMap<>();
+  private final RoundRobinLoadBalancerFactory balancerFactory;
 
   public DiscoveryClientChannelFactory(GrpcChannelsProperties channels, DiscoveryClient client) {
     this.channels = channels;
-    this.client = client;
     resolverFactory = new DiscoveryClientResolverFactory(client);
+    balancerFactory = RoundRobinLoadBalancerFactory.getInstance();
   }
 
   @Override
   public Channel createChannel(String name) {
-	  RoundRobinLoadBalancerFactory instance = RoundRobinLoadBalancerFactory.getInstance();
 	  Channel channel = channelMap.get(name);
 	  if (channel != null) {
 	  	return channel;
@@ -54,8 +53,9 @@ public class DiscoveryClientChannelFactory implements GrpcChannelFactory {
 			if (channel != null) {
 				return channel;
 			}
+
 	  	channel = ManagedChannelBuilder.forTarget(name)
-							.loadBalancerFactory(instance)
+							.loadBalancerFactory(balancerFactory)
 							.nameResolverFactory(resolverFactory)
 							.usePlaintext(channels.getChannels().get(name).isPlaintext()).build();
 	  	channelMap.put(name, channel);

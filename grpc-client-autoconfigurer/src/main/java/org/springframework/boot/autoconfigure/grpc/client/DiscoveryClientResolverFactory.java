@@ -41,6 +41,8 @@ public class DiscoveryClientResolverFactory extends NameResolver.Factory {
   @Nullable
   @Override
   public NameResolver newNameResolver(URI targetUri, Attributes params) {
+//    return new DiscoveryClientNameResolver(targetUri.toString(), client, params);
+
   	String key = targetUri.getPath() + params.toString();
   	NameResolver resolver = nameResolverMap.get(key);
   	if (resolver != null) {
