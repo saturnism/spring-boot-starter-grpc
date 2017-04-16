@@ -55,9 +55,9 @@ public class DiscoveryClientChannelFactory implements GrpcChannelFactory {
 			}
 
 	  	channel = ManagedChannelBuilder.forTarget(name)
-							.loadBalancerFactory(balancerFactory)
-							.nameResolverFactory(resolverFactory)
-							.usePlaintext(channels.getChannels().get(name).isPlaintext()).build();
+              .loadBalancerFactory(balancerFactory)
+              .nameResolverFactory(resolverFactory)
+              .usePlaintext(channels.getChannels().get(name).isPlaintext()).build();
 	  	channelMap.put(name, channel);
 		}
 
