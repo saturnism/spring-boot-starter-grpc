@@ -43,23 +43,23 @@ public class DiscoveryClientChannelFactory implements GrpcChannelFactory {
 
   @Override
   public Channel createChannel(String name) {
-	  Channel channel = channelMap.get(name);
-	  if (channel != null) {
-	  	return channel;
-		}
+    Channel channel = channelMap.get(name);
+    if (channel != null) {
+      return channel;
+    }
 
-		synchronized (channelMap) {
-	  	channel = channelMap.get(name);
-			if (channel != null) {
-				return channel;
-			}
+    synchronized (channelMap) {
+      channel = channelMap.get(name);
+      if (channel != null) {
+        return channel;
+      }
 
       channel = ManagedChannelBuilder.forTarget(name)
               .loadBalancerFactory(balancerFactory)
               .nameResolverFactory(resolverFactory)
               .usePlaintext(channels.getChannels().get(name).isPlaintext()).build();
-	  	channelMap.put(name, channel);
-		}
+      channelMap.put(name, channel);
+    }
 
     return channel;
   }
