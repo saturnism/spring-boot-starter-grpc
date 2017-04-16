@@ -19,8 +19,8 @@ package org.springframework.boot.autoconfigure.grpc.server;
 import com.google.common.net.InetAddresses;
 import io.grpc.Server;
 import io.grpc.netty.NettyServerBuilder;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 import java.net.InetSocketAddress;
@@ -32,42 +32,42 @@ import java.util.List;
  * @author Ray Tsang
  */
 public class NettyGrpcServerFactory implements GrpcServerFactory {
-	private static final Log logger = LogFactory.getLog(NettyGrpcServerFactory.class);
+  private static final Logger logger = LoggerFactory.getLogger(NettyGrpcServerFactory.class);
 
-	private final GrpcServerProperties properties;
-	private final List<GrpcServiceDefinition> services = new LinkedList<GrpcServiceDefinition>();
+  private final GrpcServerProperties properties;
+  private final List<GrpcServiceDefinition> services = new LinkedList<GrpcServiceDefinition>();
 
-	public NettyGrpcServerFactory(GrpcServerProperties properties) {
-		this.properties = properties;
-	}
+  public NettyGrpcServerFactory(GrpcServerProperties properties) {
+    this.properties = properties;
+  }
 
-	@Override
-	public Server createServer() {
-		NettyServerBuilder builder = NettyServerBuilder.forAddress(
-				new InetSocketAddress(InetAddresses.forString(getAddress()), getPort()));
-		for (GrpcServiceDefinition service : this.services) {
-			logger.info("Registered gRPC service: " + service.getDefinition().getServiceDescriptor().getName()
-					+ ", bean: " + service.getBeanName() + ", class: "
-					+ service.getBeanClazz().getName());
-			builder.addService(service.getDefinition());
-		}
+  @Override
+  public Server createServer() {
+    NettyServerBuilder builder = NettyServerBuilder.forAddress(
+        new InetSocketAddress(InetAddresses.forString(getAddress()), getPort()));
+    for (GrpcServiceDefinition service : this.services) {
+      logger.info("Registered gRPC service: " + service.getDefinition().getServiceDescriptor().getName()
+          + ", bean: " + service.getBeanName() + ", class: "
+          + service.getBeanClazz().getName());
+      builder.addService(service.getDefinition());
+    }
 
-		return builder.build();
-	}
+    return builder.build();
+  }
 
-	@Override
-	public String getAddress() {
-		return this.properties.getAddress();
-	}
+  @Override
+  public String getAddress() {
+    return this.properties.getAddress();
+  }
 
-	@Override
-	public int getPort() {
-		return this.properties.getPort();
-	}
+  @Override
+  public int getPort() {
+    return this.properties.getPort();
+  }
 
-	@Override
-	public void addService(GrpcServiceDefinition service) {
-		this.services.add(service);
-	}
+  @Override
+  public void addService(GrpcServiceDefinition service) {
+    this.services.add(service);
+  }
 
 }
