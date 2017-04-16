@@ -17,9 +17,10 @@
 package org.springframework.boot.autoconfigure.grpc.server;
 
 import io.grpc.Server;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.SmartLifecycle;
+
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -31,8 +32,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Ray Tsang
  */
 public class GrpcServerLifecycle implements SmartLifecycle {
-	private static final Log logger = LogFactory
-			.getLog(GrpcServerLifecycle.class);
+  private static final Logger logger = LoggerFactory.getLogger(GrpcServerLifecycle.class);
 	private static AtomicInteger serverCounter = new AtomicInteger(-1);
 
 	private volatile Server server;
