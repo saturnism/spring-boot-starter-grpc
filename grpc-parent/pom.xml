@@ -32,7 +32,6 @@
     </parent>
     
 	<properties>
-        <grpc.version>1.0.0</grpc.version>
         <protoc.version>3.0.0-beta-2</protoc.version>
         <protoc.plugin.version>0.5.0</protoc.plugin.version>
         <spring.boot.version>1.5.2.RELEASE</spring.boot.version>
