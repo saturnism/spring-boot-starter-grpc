@@ -43,19 +43,19 @@ public class DiscoveryClientResolverFactory extends NameResolver.Factory {
   public NameResolver newNameResolver(URI targetUri, Attributes params) {
 //    return new DiscoveryClientNameResolver(targetUri.toString(), client, params);
 
-  	String key = targetUri.getPath() + params.toString();
-  	NameResolver resolver = nameResolverMap.get(key);
-  	if (resolver != null) {
-  		return resolver;
-		}
-  	synchronized (nameResolverMap) {
-			resolver = nameResolverMap.get(key);
-			if (resolver != null) {
-				return resolver;
-			}
-			resolver = new DiscoveryClientNameResolver(targetUri.toString(), client, params);
-			nameResolverMap.put(key, resolver);
-		}
+    String key = targetUri.getPath() + params.toString();
+    NameResolver resolver = nameResolverMap.get(key);
+    if (resolver != null) {
+      return resolver;
+    }
+    synchronized (nameResolverMap) {
+      resolver = nameResolverMap.get(key);
+      if (resolver != null) {
+        return resolver;
+      }
+      resolver = new DiscoveryClientNameResolver(targetUri.toString(), client, params);
+      nameResolverMap.put(key, resolver);
+    }
     return resolver;
   }
 
