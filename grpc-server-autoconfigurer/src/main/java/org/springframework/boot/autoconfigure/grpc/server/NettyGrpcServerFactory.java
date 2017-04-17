@@ -19,8 +19,8 @@ package org.springframework.boot.autoconfigure.grpc.server;
 import com.google.common.net.InetAddresses;
 import io.grpc.Server;
 import io.grpc.netty.NettyServerBuilder;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 import java.net.InetSocketAddress;
@@ -32,7 +32,7 @@ import java.util.List;
  * @author Ray Tsang
  */
 public class NettyGrpcServerFactory implements GrpcServerFactory {
-	private static final Log logger = LogFactory.getLog(NettyGrpcServerFactory.class);
+	private static final Logger logger = LoggerFactory.getLogger(NettyGrpcServerFactory.class);
 
 	private final GrpcServerProperties properties;
 	private final List<GrpcServiceDefinition> services = new LinkedList<GrpcServiceDefinition>();
