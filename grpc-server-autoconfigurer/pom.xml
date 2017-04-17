@@ -49,6 +49,10 @@
 			<artifactId>netty-tcnative-boringssl-static</artifactId>
 			<classifier>${os.detected.classifier}</classifier>
 		</dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
 	</dependencies>
 	<build>
 		<extensions>
@@ -57,5 +61,20 @@
 				<artifactId>os-maven-plugin</artifactId>
 			</extension>
 		</extensions>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
 	</build>
 </project>

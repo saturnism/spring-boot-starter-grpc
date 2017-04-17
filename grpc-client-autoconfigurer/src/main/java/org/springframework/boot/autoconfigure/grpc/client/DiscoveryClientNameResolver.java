@@ -22,10 +22,15 @@ import io.grpc.NameResolver;
 import io.grpc.ResolvedServerInfo;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.scheduling.annotation.Scheduled;
+
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by rayt on 5/17/16.
@@ -35,6 +40,22 @@ public class DiscoveryClientNameResolver extends NameResolver {
 	private final DiscoveryClient client;
 	private final Attributes attributes;
 	private Listener listener;
+	private Timer refresh = new Timer();
+	private AtomicBoolean refresherInit = new AtomicBoolean(false);
+
+	private class Refresher extends TimerTask {
+    @Override
+    public void run() {
+      refresh();
+    }
+  }
+
+	private void initRefresher() {
+	  if (refresherInit.compareAndSet(false, true)) {
+      Refresher refresher = new Refresher();
+	    this.refresh.schedule(refresher, 20000L, 20000L);
+    }
+  }
 
 	public DiscoveryClientNameResolver(String name, DiscoveryClient client, Attributes attributes) {
 		this.name = name;
@@ -50,21 +71,29 @@ public class DiscoveryClientNameResolver extends NameResolver {
 	public void start(Listener listener) {
 		this.listener = listener;
 		refresh();
+    initRefresher();
 	}
 
+	@Scheduled(fixedRate = 20000)
 	@Override
 	public void refresh() {
-		List<ResolvedServerInfo> servers = new ArrayList<ResolvedServerInfo>();
-		System.out.println(client.description());
+		System.out.println("update service instance info ###############################################");
+		List<ResolvedServerInfo> servers = new ArrayList<>();
 		for (ServiceInstance serviceInstance : client.getInstances(name)) {
+			System.out.println("Service Instance: " + serviceInstance.getHost() + ":" + serviceInstance.getPort());
 			servers.add(new ResolvedServerInfo(InetSocketAddress.createUnresolved(serviceInstance.getHost(), serviceInstance.getPort()),Attributes.EMPTY));
 		}
-		List<List<ResolvedServerInfo>> serversList = new ArrayList<List<ResolvedServerInfo>>(1);
-		serversList.add(servers);
+		List<List<ResolvedServerInfo>> serversList = new ArrayList<>();
+		for (ResolvedServerInfo info : servers) {
+			List<ResolvedServerInfo> list = new ArrayList<>();
+			list.add(info);
+			serversList.add(list);
+		}
 		this.listener.onUpdate(serversList, Attributes.EMPTY);
 	}
 
 	@Override
 	public void shutdown() {
 	}
+
 }
