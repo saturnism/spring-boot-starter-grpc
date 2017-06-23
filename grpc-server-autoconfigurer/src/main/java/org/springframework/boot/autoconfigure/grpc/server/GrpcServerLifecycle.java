@@ -16,7 +16,9 @@
 
 package org.springframework.boot.autoconfigure.grpc.server;
 
+import io.grpc.BindableService;
 import io.grpc.Server;
+import io.grpc.ServiceDescriptor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.SmartLifecycle;
@@ -82,7 +84,7 @@ public class GrpcServerLifecycle implements SmartLifecycle {
 	protected void createAndStartGrpcServer() throws IOException {
 		Server localServer = this.server;
 		if (localServer == null) {
-			this.server = this.factory.createServer();
+			this.server = factory.createServer();
 			this.server.start();
 			logger.info("gRPC Server started, listening on address: "
 					+ this.factory.getAddress() + ", port: " + this.factory.getPort());

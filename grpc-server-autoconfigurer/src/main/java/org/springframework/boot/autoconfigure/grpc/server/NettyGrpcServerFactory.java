@@ -17,14 +17,16 @@
 package org.springframework.boot.autoconfigure.grpc.server;
 
 import com.google.common.net.InetAddresses;
+import io.grpc.BindableService;
 import io.grpc.Server;
+import io.grpc.ServiceDescriptor;
 import io.grpc.netty.NettyServerBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 
 import java.net.InetSocketAddress;
-import java.util.LinkedList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -35,21 +37,24 @@ public class NettyGrpcServerFactory implements GrpcServerFactory {
 	private static final Log logger = LogFactory.getLog(NettyGrpcServerFactory.class);
 
 	private final GrpcServerProperties properties;
-	private final List<GrpcServiceDefinition> services = new LinkedList<GrpcServiceDefinition>();
+	private final GrpcServiceDiscoverer discoverer;
 
-	public NettyGrpcServerFactory(GrpcServerProperties properties) {
+	public NettyGrpcServerFactory(GrpcServerProperties properties, GrpcServiceDiscoverer discoverer) {
 		this.properties = properties;
+		this.discoverer = discoverer;
 	}
 
 	@Override
 	public Server createServer() {
 		NettyServerBuilder builder = NettyServerBuilder.forAddress(
 				new InetSocketAddress(InetAddresses.forString(getAddress()), getPort()));
-		for (GrpcServiceDefinition service : this.services) {
-			logger.info("Registered gRPC service: " + service.getDefinition().getServiceDescriptor().getName()
-					+ ", bean: " + service.getBeanName() + ", class: "
-					+ service.getBeanClazz().getName());
-			builder.addService(service.getDefinition());
+		Collection<GrpcServiceDefinition> definitions = discoverer.findGrpcServices();
+		for (GrpcServiceDefinition definition : definitions) {
+			ServiceDescriptor descriptor = definition.getService().bindService().getServiceDescriptor();
+			logger.info("Registered gRPC service: " + descriptor.getName()
+					+ ", bean: " + definition.getBeanName() + ", class: "
+					+ definition.getService().getClass().getName());
+			builder.addService(definition.getService());
 		}
 
 		return builder.build();
@@ -64,10 +69,4 @@ public class NettyGrpcServerFactory implements GrpcServerFactory {
 	public int getPort() {
 		return this.properties.getPort();
 	}
-
-	@Override
-	public void addService(GrpcServiceDefinition service) {
-		this.services.add(service);
-	}
-
 }

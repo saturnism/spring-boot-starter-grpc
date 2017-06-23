@@ -18,11 +18,14 @@
 package org.springframework.boot.autoconfigure.grpc.client;
 
 import io.grpc.Attributes;
+import io.grpc.EquivalentAddressGroup;
 import io.grpc.NameResolver;
 import io.grpc.ResolvedServerInfo;
+import io.netty.resolver.InetSocketAddressResolver;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,14 +57,12 @@ public class DiscoveryClientNameResolver extends NameResolver {
 
 	@Override
 	public void refresh() {
-		List<ResolvedServerInfo> servers = new ArrayList<ResolvedServerInfo>();
+		List<EquivalentAddressGroup> servers = new ArrayList<>();
 		System.out.println(client.description());
 		for (ServiceInstance serviceInstance : client.getInstances(name)) {
-			servers.add(new ResolvedServerInfo(InetSocketAddress.createUnresolved(serviceInstance.getHost(), serviceInstance.getPort()),Attributes.EMPTY));
+			servers.add(new EquivalentAddressGroup(InetSocketAddress.createUnresolved(serviceInstance.getHost(), serviceInstance.getPort())));
 		}
-		List<List<ResolvedServerInfo>> serversList = new ArrayList<List<ResolvedServerInfo>>(1);
-		serversList.add(servers);
-		this.listener.onUpdate(serversList, Attributes.EMPTY);
+		this.listener.onAddresses(servers, Attributes.EMPTY);
 	}
 
 	@Override

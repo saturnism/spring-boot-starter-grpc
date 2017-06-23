@@ -16,6 +16,8 @@
 
 package org.springframework.boot.autoconfigure.grpc.server;
 
+import io.grpc.BindableService;
+
 import java.util.Collection;
 
 /**

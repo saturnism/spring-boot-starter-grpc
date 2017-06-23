@@ -20,7 +20,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.github.saturnism.springboot</groupId>
+		<groupId>com.github.saturnism.spring-boot-starter-grpc</groupId>
 		<artifactId>grpc-parent</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 		<relativePath>../grpc-parent</relativePath>
@@ -46,8 +46,18 @@
 		</dependency>
 		<dependency>
 			<groupId>io.grpc</groupId>
-			<artifactId>grpc-all</artifactId>
+			<artifactId>grpc-netty</artifactId>
+            <scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-protobuf</artifactId>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-stub</artifactId>
+            <scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>

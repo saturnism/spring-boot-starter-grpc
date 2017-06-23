@@ -29,6 +29,4 @@ public interface GrpcServerFactory {
 	String getAddress();
 
 	int getPort();
-
-	void addService(GrpcServiceDefinition service);
 }

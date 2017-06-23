@@ -16,15 +16,20 @@
 
 package org.springframework.boot.autoconfigure.grpc.server;
 
+import com.google.common.net.InetAddresses;
+import io.grpc.BindableService;
 import io.grpc.Server;
 
+import io.grpc.ServerBuilder;
+import io.grpc.netty.NettyServerBuilder;
 import io.netty.channel.Channel;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.net.InetSocketAddress;
 
 /**
  * Autoconfiguration for gRPC server.
@@ -48,22 +53,14 @@ public class GrpcServerAutoConfiguration {
 	}
 
 	@ConditionalOnMissingBean
-	@ConditionalOnClass(Channel.class)
 	@Bean
-	public NettyGrpcServerFactory nettyGrpcServiceFactory(
-			GrpcServerProperties properties, GrpcServiceDiscoverer discoverer) {
-		NettyGrpcServerFactory factory = new NettyGrpcServerFactory(properties);
-		for (GrpcServiceDefinition service : discoverer.findGrpcServices()) {
-			factory.addService(service);
-		}
-
-		return factory;
+	public NettyGrpcServerFactory nettyGrpcServerFactory(GrpcServerProperties properties, GrpcServiceDiscoverer discover) {
+		return new NettyGrpcServerFactory(properties, discover);
 	}
 
 	@ConditionalOnMissingBean
 	@Bean
-	public GrpcServerLifecycle grpcServerLifecycle(
-			GrpcServerFactory factory) {
+	public GrpcServerLifecycle grpcServerLifecycle(GrpcServerFactory factory) {
 		return new GrpcServerLifecycle(factory);
 	}
 }

@@ -17,6 +17,7 @@
 
 package org.springframework.boot.autoconfigure.grpc.server;
 
+import io.grpc.BindableService;
 import io.grpc.ServerServiceDefinition;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -66,45 +67,11 @@ public class AnnotationGrpcServiceDiscoverer
 		for (String beanName : beanNames) {
 			Object bean = this.applicationContext.getBean(beanName);
 			Class<?> beanClazz = bean.getClass();
-			GrpcService grpcServiceAnnotation = AnnotationUtils.findAnnotation(beanClazz,
-					GrpcService.class);
-			Class<?> grpcClazz = grpcServiceAnnotation.value();
-			Method[] methods = grpcClazz.getDeclaredMethods();
-			boolean bindServiceFound = false;
-			for (Method method : methods) {
-				if (Modifier.isStatic(method.getModifiers())
-						&& method.getName().equals("bindService")) {
-					bindServiceFound = true;
-					try {
-						Class<?> grpcInterfaceClazz = method.getParameterTypes()[0];
-						if (!grpcInterfaceClazz.isAssignableFrom(beanClazz)) {
-							throw new IllegalStateException("gRPC service class: "
-									+ bean.getClass().getName() + " does not implement "
-									+ grpcInterfaceClazz.getName());
-						}
-						ServerServiceDefinition definition = (ServerServiceDefinition) method
-								.invoke(null, bean);
-						definitions.add(new GrpcServiceDefinition(beanName, beanClazz,
-								definition));
-						logger.debug("Found gRPC service: " + definition.getServiceDescriptor().getName()
-								+ ", bean: " + beanName + ", class: "
-								+ bean.getClass().getName());
-					}
-					catch (IllegalAccessException e) {
-						throw new IllegalStateException(e);
-					}
-					catch (IllegalArgumentException e) {
-						throw new IllegalStateException(e);
-					}
-					catch (InvocationTargetException e) {
-						throw new IllegalStateException(e);
-					}
-				}
+			if (!BindableService.class.isAssignableFrom(beanClazz)) {
+				throw new IllegalStateException(beanClazz.getName() + " does not seem to extend a generated base implementation nor implements BindableService");
 			}
-			if (!bindServiceFound) {
-				throw new IllegalStateException(grpcClazz.getName()
-						+ " does not have a static bindService method, are you sure this is a gRPC generated class?");
-			}
+
+			definitions.add(new GrpcServiceDefinition(beanName, (BindableService) bean));
 		}
 		return definitions;
 	}
