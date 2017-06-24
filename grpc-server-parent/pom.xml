@@ -19,7 +19,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.saturnism.spring-boot-starter-grpc</groupId>
 	<artifactId>grpc-server-parent</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>master-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Spring Boot gRPC Server Parent</name>
 	<description>Spring Boot gRPC Parent</description>
@@ -29,14 +29,39 @@
 	    <version>1.5.2.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<dependencyManagement>
+    <dependencyManagement>
 		<dependencies>
 			<dependency>
 				<groupId>com.github.saturnism.spring-boot-starter-grpc</groupId>
 				<artifactId>grpc-parent</artifactId>
-				<version>1.0.0-SNAPSHOT</version>
-				<type>pom</type>
-     		<scope>import</scope>
+				<version>master-SNAPSHOT</version>
+                <type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.github.saturnism.spring-boot-starter-grpc</groupId>
+				<artifactId>grpc-server-parent</artifactId>
+				<version>master-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.saturnism.spring-boot-starter-grpc</groupId>
+				<artifactId>grpc-server-autoconfigurer</artifactId>
+				<version>master-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.saturnism.spring-boot-starter-grpc</groupId>
+				<artifactId>grpc-server-starter</artifactId>
+				<version>master-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.saturnism.spring-boot-starter-grpc</groupId>
+				<artifactId>grpc-client-autoconfigurer</artifactId>
+				<version>master-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.saturnism.spring-boot-starter-grpc</groupId>
+				<artifactId>grpc-client-starter</artifactId>
+				<version>master-SNAPSHOT</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

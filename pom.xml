@@ -19,7 +19,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.saturnism.spring-boot-starter-grpc</groupId>
 	<artifactId>grpc-starter-build</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>master</version>
 	<packaging>pom</packaging>
 	<name>Spring Boot gRPC Starter Build</name>
 	<description>Spring Boot gRPC Starter Build</description>
