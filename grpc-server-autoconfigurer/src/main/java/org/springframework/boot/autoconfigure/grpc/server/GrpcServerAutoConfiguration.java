@@ -16,20 +16,13 @@
 
 package org.springframework.boot.autoconfigure.grpc.server;
 
-import com.google.common.net.InetAddresses;
-import io.grpc.BindableService;
 import io.grpc.Server;
 
-import io.grpc.ServerBuilder;
-import io.grpc.netty.NettyServerBuilder;
-import io.netty.channel.Channel;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.net.InetSocketAddress;
 
 /**
  * Autoconfiguration for gRPC server.

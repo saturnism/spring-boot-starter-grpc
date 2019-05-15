@@ -37,27 +37,27 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-commons</artifactId>
-			<scope>provided</scope>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-autoconfigure</artifactId>
-			<scope>provided</scope>
+            <optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>io.grpc</groupId>
-			<artifactId>grpc-netty</artifactId>
-            <scope>provided</scope>
+			<artifactId>grpc-netty-shaded</artifactId>
+            <optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>io.grpc</groupId>
 			<artifactId>grpc-protobuf</artifactId>
-			<scope>provided</scope>
+            <optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>io.grpc</groupId>
 			<artifactId>grpc-stub</artifactId>
-            <scope>provided</scope>
+            <optional>true</optional>
 		</dependency>
 	</dependencies>
 </project>

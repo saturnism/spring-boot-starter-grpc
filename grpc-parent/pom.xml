@@ -26,16 +26,22 @@
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<spring.boot.version>1.5.2.RELEASE</spring.boot.version>
-		<spring.cloud.version>Dalston.SR1</spring.cloud.version>
-		<netty.version>1.1.33.Fork14</netty.version>
-		<grpc.version>1.4.0</grpc.version>
-		<protobuf.plugin.version>0.5.0</protobuf.plugin.version>
-		<protoc.version>3.3.0</protoc.version>
-		<os.plugin.version>1.4.1.Final</os.plugin.version>
+		<spring.boot.version>2.1.4.RELEASE</spring.boot.version>
+		<spring.cloud.version>Greenwich.SR1</spring.cloud.version>
+		<grpc.version>1.20.0</grpc.version>
+		<protobuf.plugin.version>0.5.1</protobuf.plugin.version>
+		<protoc.version>3.7.1</protoc.version>
+		<os.plugin.version>1.5.0.Final</os.plugin.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>io.grpc</groupId>
+				<artifactId>grpc-bom</artifactId>
+				<version>${grpc.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter</artifactId>
@@ -49,12 +55,6 @@
 				<version>${spring.cloud.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
-			</dependency>
-			<dependency>
-				<groupId>io.netty</groupId>
-				<artifactId>netty-tcnative-boringssl-static</artifactId>
-				<version>${netty.version}</version>
-				<classifier>${os.detected.classifier}</classifier>
 			</dependency>
 			<dependency>
 				<groupId>com.github.saturnism.spring-boot-starter-grpc</groupId>
@@ -75,21 +75,6 @@
 				<groupId>com.github.saturnism.spring-boot-starter-grpc</groupId>
 				<artifactId>grpc-client-starter</artifactId>
 				<version>master-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>io.grpc</groupId>
-				<artifactId>grpc-netty</artifactId>
-				<version>${grpc.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.grpc</groupId>
-				<artifactId>grpc-protobuf</artifactId>
-				<version>${grpc.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.grpc</groupId>
-				<artifactId>grpc-stub</artifactId>
-				<version>${grpc.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

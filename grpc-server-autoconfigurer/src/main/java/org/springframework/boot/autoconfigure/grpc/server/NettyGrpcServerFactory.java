@@ -17,17 +17,15 @@
 package org.springframework.boot.autoconfigure.grpc.server;
 
 import com.google.common.net.InetAddresses;
-import io.grpc.BindableService;
 import io.grpc.Server;
 import io.grpc.ServiceDescriptor;
-import io.grpc.netty.NettyServerBuilder;
+import io.grpc.netty.shaded.io.grpc.netty.NettyServerBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 
 import java.net.InetSocketAddress;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Creates a Netty gRPC server using {@link NettyServerBuilder}.
