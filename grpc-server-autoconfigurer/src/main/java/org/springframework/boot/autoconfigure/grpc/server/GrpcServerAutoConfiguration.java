@@ -47,8 +47,8 @@ public class GrpcServerAutoConfiguration {
 
 	@ConditionalOnMissingBean
 	@Bean
-	public NettyGrpcServerFactory nettyGrpcServerFactory(GrpcServerProperties properties, GrpcServiceDiscoverer discover) {
-		return new NettyGrpcServerFactory(properties, discover);
+	public DefaultGrpcServerFactory defaultGrpcServerFactory(GrpcServerProperties properties, GrpcServiceDiscoverer discover) {
+		return new DefaultGrpcServerFactory(properties, discover);
 	}
 
 	@ConditionalOnMissingBean

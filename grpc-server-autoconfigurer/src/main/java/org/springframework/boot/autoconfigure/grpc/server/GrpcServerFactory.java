@@ -26,7 +26,5 @@ import io.grpc.Server;
 public interface GrpcServerFactory {
 	Server createServer();
 
-	String getAddress();
-
 	int getPort();
 }

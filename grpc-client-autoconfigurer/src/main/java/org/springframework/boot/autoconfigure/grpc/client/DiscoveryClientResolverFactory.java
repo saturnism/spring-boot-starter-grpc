@@ -37,7 +37,7 @@ public class DiscoveryClientResolverFactory extends NameResolver.Factory {
   @Nullable
   @Override
   public NameResolver newNameResolver(URI targetUri, Attributes params) {
-    return new DiscoveryClientNameResolver(targetUri.toString(), client, params);
+    return new DiscoveryClientNameResolver(targetUri.getHost(), client, params);
   }
 
   @Override

@@ -16,36 +16,33 @@
 
 package org.springframework.boot.autoconfigure.grpc.server;
 
-import com.google.common.net.InetAddresses;
 import io.grpc.Server;
+import io.grpc.ServerBuilder;
 import io.grpc.ServiceDescriptor;
 import io.grpc.netty.shaded.io.grpc.netty.NettyServerBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-
-import java.net.InetSocketAddress;
 import java.util.Collection;
 
 /**
  * Creates a Netty gRPC server using {@link NettyServerBuilder}.
  * @author Ray Tsang
  */
-public class NettyGrpcServerFactory implements GrpcServerFactory {
-	private static final Log logger = LogFactory.getLog(NettyGrpcServerFactory.class);
+public class DefaultGrpcServerFactory implements GrpcServerFactory {
+	private static final Log logger = LogFactory.getLog(DefaultGrpcServerFactory.class);
 
 	private final GrpcServerProperties properties;
 	private final GrpcServiceDiscoverer discoverer;
 
-	public NettyGrpcServerFactory(GrpcServerProperties properties, GrpcServiceDiscoverer discoverer) {
+	public DefaultGrpcServerFactory(GrpcServerProperties properties, GrpcServiceDiscoverer discoverer) {
 		this.properties = properties;
 		this.discoverer = discoverer;
 	}
 
 	@Override
 	public Server createServer() {
-		NettyServerBuilder builder = NettyServerBuilder.forAddress(
-				new InetSocketAddress(InetAddresses.forString(getAddress()), getPort()));
+		ServerBuilder builder = ServerBuilder.forPort(getPort());
 		Collection<GrpcServiceDefinition> definitions = discoverer.findGrpcServices();
 		for (GrpcServiceDefinition definition : definitions) {
 			ServiceDescriptor descriptor = definition.getService().bindService().getServiceDescriptor();
@@ -56,11 +53,6 @@ public class NettyGrpcServerFactory implements GrpcServerFactory {
 		}
 
 		return builder.build();
-	}
-
-	@Override
-	public String getAddress() {
-		return this.properties.getAddress();
 	}
 
 	@Override

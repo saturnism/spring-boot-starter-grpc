@@ -30,24 +30,11 @@ public class GrpcServerProperties {
 	 */
 	private int port = 9090;
 
-	/**
-	 * Bind address for the server. Defaults to 0.0.0.0.
-	 */
-	private String address = "0.0.0.0";
-
 	public int getPort() {
 		return this.port;
 	}
 
 	public void setPort(int port) {
 		this.port = port;
-	}
-
-	public String getAddress() {
-		return this.address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
 	}
 }

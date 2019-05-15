@@ -57,7 +57,7 @@ public class DiscoveryClientNameResolver extends NameResolver {
 		List<EquivalentAddressGroup> servers = new ArrayList<>();
 		System.out.println(client.description());
 		for (ServiceInstance serviceInstance : client.getInstances(name)) {
-			servers.add(new EquivalentAddressGroup(InetSocketAddress.createUnresolved(serviceInstance.getHost(), serviceInstance.getPort())));
+			servers.add(new EquivalentAddressGroup(new InetSocketAddress(serviceInstance.getHost(), serviceInstance.getPort())));
 		}
 		this.listener.onAddresses(servers, Attributes.EMPTY);
 	}

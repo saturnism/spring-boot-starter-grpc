@@ -86,8 +86,7 @@ public class GrpcServerLifecycle implements SmartLifecycle {
 		if (localServer == null) {
 			this.server = factory.createServer();
 			this.server.start();
-			logger.info("gRPC Server started, listening on address: "
-					+ this.factory.getAddress() + ", port: " + this.factory.getPort());
+			logger.info("gRPC Server started, listening on port: " + this.factory.getPort());
 
 			Thread awaitThread = new Thread(
 					"container-" + (serverCounter.incrementAndGet())) {

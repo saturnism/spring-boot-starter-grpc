@@ -20,12 +20,12 @@ import io.grpc.Channel;
 
 import io.grpc.LoadBalancer;
 import io.grpc.util.RoundRobinLoadBalancerFactory;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.*;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +37,7 @@ import java.util.Map;
 @Configuration
 @EnableConfigurationProperties
 @ConditionalOnClass({ Channel.class })
+@AutoConfigureAfter( name = {"org.springframework.cloud.netflix.eureka.EurekaClientAutoConfiguration"})
 public class GrpcClientAutoConfiguration {
 
 	@ConditionalOnMissingBean
